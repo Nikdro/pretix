@@ -72,7 +72,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image for ARM64
+        env:
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
         run: |
-          IMAGE_TAG=${{ github.sha }}
-          IMAGE_NAME=ghcr.io/${{ toLower(github.repository_owner) }}/pretix:${IMAGE_TAG}
-
+          OWNER=$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')
+          REPO=$(echo "$REPO" | tr '[:upper:]' '[:lower:]')
+          IMAGE_NAME=ghcr.io/$OWNER/$REPO:latest
+          docker buildx build --platform linux/arm64 --push -t $IMAGE_NAME .
