@@ -73,5 +73,5 @@ jobs:
 
       - name: Build and push Docker image for ARM64
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/your-image-name:latest
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner | toLower }}/${{ github.event.repository.name | toLower }}:latest
           docker buildx build --platform linux/arm64 --push -t $IMAGE_NAME .
